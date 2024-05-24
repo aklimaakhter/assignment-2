@@ -5,7 +5,7 @@ const orderSchema = new Schema<Order>({
   email: {
     type: String,
     required: true,
-    match: /.+\@.+\..+/,
+    match: /.+.+\..+/,
   },
   productId: {
     type: String,

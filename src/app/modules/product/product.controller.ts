@@ -36,12 +36,33 @@ const createProduct = async (req: Request, res: Response) => {
 
 const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const result = await ProductServices.getAllProductsFromDB()
-    res.status(200).json({
-      success: true,
-      message: 'Products are retrieved successfully',
-      data: result,
-    })
+    const { searchTerm } = req.query
+
+    if (searchTerm) {
+      const result = await ProductServices.searchProductValue(
+        searchTerm as string,
+      )
+
+      res.status(200).json({
+        success: true,
+        message: `Products matching search term '${searchTerm}' fetched successfully!`,
+        data: result,
+      })
+
+      if (!searchTerm) {
+        return res
+          .status(400)
+          .json({ success: false, message: 'Search term is required' })
+      }
+    } else {
+      const result = await ProductServices.getAllProductsFromDB()
+
+      res.status(200).json({
+        success: true,
+        message: 'Products fetched successfully!',
+        data: result,
+      })
+    }
   } catch (err) {
     res.status(500).json({
       success: false,

@@ -11,7 +11,16 @@ const getAllOrdersFromDB = async () => {
   return result
 }
 
+const getOrdersByUserEmailDB = async (userEmail: string) => {
+  const result = await OrderModel.find({ email: userEmail })
+  if (result.length === 0) {
+    throw Error('Order not found')
+  }
+  return result
+}
+
 export const OrderServices = {
   createOrderIntoDB,
   getAllOrdersFromDB,
+  getOrdersByUserEmailDB,
 }

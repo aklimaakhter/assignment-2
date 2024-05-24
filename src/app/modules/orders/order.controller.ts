@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import orderValidationSchema from './order.validation'
 import { OrderServices } from './order.services'
 
-const createOrder = async (req: Request, res: Response) => {
+const createOrders = async (req: Request, res: Response) => {
   try {
     const orderData = req.body
 
@@ -34,6 +34,24 @@ const createOrder = async (req: Request, res: Response) => {
   }
 }
 
+const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    const result = await OrderServices.getAllOrdersFromDB()
+    res.status(200).json({
+      success: true,
+      message: 'Orders are retrieved successfully',
+      data: result,
+    })
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+      error: err,
+    })
+  }
+}
+
 export const OrderControllers = {
-  createOrder,
+  createOrders,
+  getAllOrders,
 }

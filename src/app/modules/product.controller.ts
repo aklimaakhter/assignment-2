@@ -70,8 +70,40 @@ const getSingleProduct = async (req: Request, res: Response) => {
   }
 }
 
+const updateSingleData = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params
+    const updatedData = req.body
+
+    //  creating schema a validation using Joi
+    const { error, value } = productValidationSchema.validate(updatedData)
+
+    const result = await ProductServices.updateProductSingleValue(
+      productId,
+      value,
+    )
+
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message || 'something went wrong',
+        error: error.details,
+      })
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Product updated successfully!',
+      data: result,
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export const ProductControllers = {
   createProduct,
   getAllProducts,
   getSingleProduct,
+  updateSingleData,
 }
